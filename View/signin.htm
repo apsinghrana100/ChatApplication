@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign-In and Login Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<style>
+		body {
+			background-color: #f2f2f2;
+		}
+		.container {
+			margin-top: 50px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px #ccc;
+			padding: 30px;
+			background-color: #fff;
+		}
+		.form-group {
+			margin-bottom: 20px;
+		}
+		.form-group label {
+			font-weight: bold;
+			display: block;
+			margin-bottom: 5px;
+		}
+		.form-group input {
+			width: 100%;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			box-shadow: 0px 0px 5px #ccc;
+			font-size: 16px;
+			margin-bottom: 10px;
+			background-color: #f2f2f2;
+		}
+		.btn-primary {
+			background-color: #5bc0de;
+			border-color: #5bc0de;
+			width: 100%;
+			font-size: 16px;
+			padding: 10px;
+			border-radius: 5px;
+		}
+		.btn-primary:hover {
+			background-color: #4da4bf;
+			border-color: #4da4bf;
+		}
+		.text-center {
+			margin-top: 20px;
+		}
+		.text-center a {
+			color: #5bc0de;
+		}
+		.text-center a:hover {
+			color: #4da4bf;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h2 class="text-center">Sign-In</h2>
+		<form>
+			<div class="form-group">
+				<label for="Name">User Name:</label>
+				<input type="text" class="form-control" id="name" placeholder="Enter Name">
+			</div>
+            <div class="form-group">
+				<label for="email">Email address:</label>
+				<input type="email" class="form-control" id="email" placeholder="Enter email">
+			</div>
+            <div class="form-group">
+				<label for="mobile">Phone No:</label>
+				<input type="number" class="form-control" id="mobile" placeholder="Enter Mobile">
+			</div>
+			<div class="form-group">
+				<label for="pwd">Password:</label>
+				<input type="password" class="form-control" id="pwd" placeholder="Enter password">
+			</div>
+           
+			
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<div class="text-center">
+			<p>Don't have an account? <a href="login.htm">Sign up</a></p>
+			<p><a href="#">Forgot password?</a></p>
+		</div>
+	</div>
+  </body>
+  </html>  
+
+	
