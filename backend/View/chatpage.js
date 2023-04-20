@@ -77,17 +77,19 @@ var userid=0;
   window.addEventListener('DOMContentLoaded',async()=>{
    const userchat= await axios.get("http://localhost:3000/fetchchat");
    console.log(userchat.data);
-    // for(let i=0;i<userchat.data.userchat.length;i++)
-    // {
-    //   addMessageOnScreen(userchat.data.userchat[i].message);
-    // }
     addMessageOnScreen(userchat);
   })
 
+setInterval(async() => {
+  const userchat= await axios.get("http://localhost:3000/fetchchat");
+   console.log(userchat.data);
+    addMessageOnScreen(userchat);
+}, 1000);
 
   function addMessageOnScreen(message)
   {
     
+    messageList.innerHTML="";
     console.log(message);
     for (let index = 0; index < message.data.userchat.length; index++) {
       const newMessage = document.createElement("li");
@@ -109,7 +111,7 @@ var userid=0;
           
           newMessage.style.textAlign = "right";
           messageList.appendChild(newMessage);
-          messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
+          // messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
           
            }else{
             console.log("jello ajay");
@@ -122,7 +124,7 @@ var userid=0;
             </div>`;
           newMessage.style.textAlign= "left";
           messageList.appendChild(newMessage);
-          messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
+          // messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
           }
         
            
