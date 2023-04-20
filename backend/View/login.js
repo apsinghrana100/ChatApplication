@@ -19,6 +19,7 @@ const password=document.getElementById('pwd');
                 
                     console.log(respose.data.msg+""+respose.data.userdata);
                     localStorage.setItem("token",respose.data.userdata);
+                    location.href='chatpage.htm'
             }else{
                 console.log(respose.data.msg);
             }
