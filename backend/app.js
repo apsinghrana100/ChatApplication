@@ -4,6 +4,7 @@ const bodyperser=require('body-parser');
 const sequelize=require('./util/Databaseconnection');
 const userroute=require('./router/user');
 const messageRoute=require('./router/message');
+const path=require('path');
 
 const cors=require('cors')
 app.use(cors());
