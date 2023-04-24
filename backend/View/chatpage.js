@@ -110,28 +110,28 @@ window.addEventListener('DOMContentLoaded',async()=>{
   
 });
 
-try {
-  setInterval(async() => {
-       const token=localStorage.getItem('token');
-        const LastMessageId=localStorage.getItem('Lastmessageid')
-        console.log(LastMessageId);
-    const userchat= await axios.get(`http://localhost:3000/fetchNewMessage?lastmessageid=${LastMessageId}`,{
-      headers: {
-        'Authorization':token
-      } 
-    });
-     console.log(userchat.data);
-     const totalmesage= userchat.data.userchat.length
-     console.log("totallen"+totalmesage);
-     if(totalmesage>0){
-         localStorage.setItem('Lastmessageid',userchat.data.userchat[totalmesage-1].id);
-        addMessageOnScreen(userchat);
-     }
-  }, 1000);
-} catch (error) {
-  console.log(error);
-  unauthorizedUser(error);
-}
+// try {
+//   setInterval(async() => {
+//        const token=localStorage.getItem('token');
+//         const LastMessageId=localStorage.getItem('Lastmessageid')
+//         console.log(LastMessageId);
+//     const userchat= await axios.get(`http://localhost:3000/fetchNewMessage?lastmessageid=${LastMessageId}`,{
+//       headers: {
+//         'Authorization':token
+//       } 
+//     });
+//      console.log(userchat.data);
+//      const totalmesage= userchat.data.userchat.length
+//      console.log("totallen"+totalmesage);
+//      if(totalmesage>0){
+//          localStorage.setItem('Lastmessageid',userchat.data.userchat[totalmesage-1].id);
+//         addMessageOnScreen(userchat);
+//      }
+//   }, 1000);
+// } catch (error) {
+//   console.log(error);
+//   unauthorizedUser(error);
+// }
 
 
 function addMessageOnScreen(message)
@@ -185,5 +185,3 @@ function unauthorizedUser(error)
   }
   
 }
-
-

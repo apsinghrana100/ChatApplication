@@ -57,3 +57,18 @@ exports.fetchNewMessge=(async (req,res)=>{
   }
  
 })
+
+
+exports.UserDetail=( async(req,res)=>{
+  // const userchat= await chattable.findAll({
+  //   attributes: ['message']
+  // });
+  try {
+    const userDetail= await Tbluserdetails.findAll();
+
+     res.send({success:true,userDetail:userDetail});
+  } catch (error) {
+    console.log(error);
+  }
+  
+});
