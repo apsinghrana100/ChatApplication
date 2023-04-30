@@ -8,8 +8,14 @@ const usergroup=sequelize.define('usergroup',{
         allowNull:false,
         primaryKey:true
     },
-    // userId:DataTypes.INTEGER,
-    // groupId:DataTypes.INTEGER,
+      isAdmin:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:false
+      },
+      isSuperAdmin:{
+       type: DataTypes.BOOLEAN,
+       defaultValue:false
+      }
 });
 
 module.exports=usergroup;

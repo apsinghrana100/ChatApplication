@@ -8,7 +8,7 @@ const password=document.getElementById('pwd');
     event.preventDefault();
     console.log(name.value);
     try {
-        
+            if(name.value.trim()!="" && email.value.trim()!="" && email.value.trim()!="" && password.value.trim()!="" ){
             const UserData={
                 name:name.value,
                 email:email.value,
@@ -19,10 +19,13 @@ const password=document.getElementById('pwd');
                 const response= await axios.post("http://localhost:3000/adduserdetail",UserData);
                 if(response.data.success===true)
                 {
-                    console.log("Insert  successfully");
+                    alert("Insert  successfully");
                 }else {
-                    console.log("Email id Exists");
+                    alert("Email id Exists");
                 }
+            }else{
+                alert("Might be some Field are empty");
+            }
                 // if(response.data)
                 //  console.log(name.value);
       } catch (error) {

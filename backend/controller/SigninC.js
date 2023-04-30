@@ -1,6 +1,9 @@
 const usertable=require('../module/userdetailtable');
+const usergrouptable=require('../module/usergroup');
 const bcrypt=require('bcrypt');
 var jwt = require('jsonwebtoken');
+const sequelize=require('sequelize');
+const { Op } = require('sequelize');
 
 exports.addUserDetail=(async(req,res)=>{
     try {
@@ -72,4 +75,53 @@ function token(id,name)
         console.log(error);
 }
     
+ })
+
+
+ exports.AddNerUser=(async(req,res)=>{
+    console.log("i am here"+req.user.id+" "+req.query.groupid);
+    try {
+        // const result = await usertable.findAll({
+        //     include: [
+        //       {
+        //         model: usergrouptable,
+        //         where: { grouptableId: `${req.query.groupid}` },
+        //         attributes: ['tbluserdetailId'],
+        //         required: false
+        //       }
+        //     ],
+        //     where: {
+        //       '$usergroups.tbluserdetailId$': { [sequelize.Op.ne]: null }
+        //     }
+        //   });
+    
+
+        
+        const result = await usertable.findAll({
+            where: {
+              id: {
+                [Op.notIn]: sequelize.literal(`
+                  (SELECT tbluserdetailId
+                  FROM usergroups
+                  WHERE grouptableId = ${req.query.groupid}
+                )`)
+              }
+            },
+            include: [{
+              model: usergrouptable,
+            //    where: { grouptableId: 19 },
+              attributes: []
+            }]
+          });
+          
+          
+          
+          
+          
+          console.log(result);
+          res.send({success:true,userDetail:result});
+    } catch (error) {
+        console.log(error);
+    }
+   
  })

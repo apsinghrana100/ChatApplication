@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const chattable=require('../module/messagetable');
 const Tbluserdetails=require('../module/userdetailtable');
+const { Op } = require('sequelize'); 
 
 
 
@@ -64,7 +65,13 @@ exports.UserDetail=( async(req,res)=>{
   //   attributes: ['message']
   // });
   try {
-    const userDetail= await Tbluserdetails.findAll();
+    const userDetail= await Tbluserdetails.findAll({
+      where: {
+        id: {
+          [Op.ne]: `${req.user.id}`
+        }
+      }
+    });
 
      res.send({success:true,userDetail:userDetail});
   } catch (error) {

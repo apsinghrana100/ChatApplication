@@ -8,7 +8,10 @@ const messagetable=Sequelize.define('chattable',{
         allowNull:false,
         primaryKey:true
     },
-    message:sequelize.TEXT
+    message:{
+        type: sequelize.TEXT({ length: 'medium' }),
+        collate: 'utf8mb4_unicode_ci'
+    }
 })
 
 module.exports=messagetable;

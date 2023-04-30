@@ -26,7 +26,12 @@ usertable.hasMany(userchattable);
 userchattable.belongsTo(usertable);
 
 grouptable.hasMany(userchattable);
+userchattable.belongsTo(grouptable);
 
+
+
+usertable.belongsToMany(grouptable,{ through: usergrouptbble });
+grouptable.belongsToMany(usertable, { through: usergrouptbble });
 
 grouptable.hasMany(usergrouptbble);
 usertable.hasMany(usergrouptbble);

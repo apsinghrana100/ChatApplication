@@ -4,7 +4,7 @@ const password=document.getElementById('pwd');
  async function loginChecking(event)
  {
     try {
-        
+         if(email.value.trim()!="" && password.value.trim()!=""){
             event.preventDefault();
             console.log(email.value);
             console.log(password.value);
@@ -19,10 +19,16 @@ const password=document.getElementById('pwd');
                 
                     console.log(respose.data.msg+""+respose.data.userdata);
                     localStorage.setItem("token",respose.data.userdata);
-                    location.href='chatpage.htm'
-            }else{
-                console.log(respose.data.msg);
+                    alert("Login Successfull");
+                    location.href='GroupPage.htm'
             }
+            if(respose.data.success===false)
+            {
+                alert(respose.data.msg);
+            }
+         }else{
+                alert("Some Field might be empty");
+         }
 
     } catch (error) {
             console.log(error);

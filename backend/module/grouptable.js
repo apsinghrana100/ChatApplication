@@ -8,7 +8,11 @@ const grouptable=sequelize.define('grouptable',{
         allowNull:false,
         primaryKey:true
     },
-    groupName:DataTypes.STRING
+    groupName:{
+        type:DataTypes.STRING,
+        unique: true
+
+    }
 });
 
 

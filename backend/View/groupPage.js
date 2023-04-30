@@ -14,8 +14,12 @@
         
         // Toggle modal when Create Group button is clicked
         createGroupBtn.addEventListener('click',() => {
-            
-                 axios.get("http://localhost:3000/UserDetail")
+          const token=localStorage.getItem('token');
+                 axios.get("http://localhost:3000/UserDetail?",{
+                  headers: {
+                    'Authorization':token
+                  }
+                })
                  .then((Userlist)=>{
                     addUserToList(Userlist);
                     console.log(Userlist);
@@ -147,11 +151,25 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
                         groupUseridArray:selectedValues
               }
 
-       
-    await axios.post('http://localhost:3000/createGroup',CreateGroupData);
-    const newGroupListItem=  `<li><a href="#">${groupnameInput.value}</a></li>`;
+    const token=localStorage.getItem('token');
+   const isCreateGroup = await axios.post('http://localhost:3000/createGroup',CreateGroupData,{
+      headers: {
+        'Authorization':token
+      }
+    });
+    if(isCreateGroup.data.success===true)
+    {
+      alert("Group Create Successfully!!");
+      const newGroupListItem=  `<li><a href="#">${groupnameInput.value}</a></li>`;
 
        showGroupList.innerHTML+=newGroupListItem;
+    }
+    if(isCreateGroup.data.success===false)
+    {
+      alert(isCreateGroup.data.msg + "something went Wrong")
+    }
+
+    
     // http://localhost:3000/login
   });
 
@@ -165,8 +183,14 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
               'Authorization':token
             }
           });
-         console.log(groupname);
-         GroupNameOnScreen(groupname)
+
+          if(groupname.data.success===true)
+          {
+            console.log(groupname);
+            // alert("Create Group successfully");
+            GroupNameOnScreen(groupname)
+          }
+         
    } catch (error) {
       console.log(error);
    }
@@ -178,8 +202,7 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
   {      showGroupList.innerHTML="";
          for (let index = 0; index < groupname.data.groupname.length; index++) {
             
-            const newGroupListItem=  `<li id="${groupname.data.groupname[index].id}" ondblclick="myFunction(${groupname.data.groupname[index].id},'${groupname.data.groupname[index].groupName}')"><a href="#">${groupname.data.groupname[index].groupName}</a></li>`;
-            newGroupListItem.style
+            const newGroupListItem=  `<li id="${groupname.data.groupname[index].id}" ondblclick="myFunction(${groupname.data.groupname[index].id},'${groupname.data.groupname[index].groupName}')" oncontextmenu="groupPermission(${groupname.data.groupname[index].id},'${groupname.data.groupname[index].groupName}')"><a href="#"><button><b>${groupname.data.groupname[index].groupName}</b></button></a></li>`;
             showGroupList.innerHTML+=newGroupListItem;
             
          }
@@ -190,17 +213,25 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
   {
       alert("i am calling"+" "+groupid+groupName);
       document.getElementById("groupnameId").innerText=groupName;
-      localStorage.setItem("groupid",groupid);
-
+      // localStorage.setItem("groupid",groupid);
+       
       const token=localStorage.getItem('token');
-      const userchat= await axios.get(`http://localhost:3000/fetchGroupChat?groupid=${groupid}`,{
-         headers: {
-        'Authorization':token
-      } 
-   });
-
-   console.log(userchat.data);
-    addMessageOnScreen(userchat)
+      const LastMessageId= -1;
+      console.log(LastMessageId);
+      localStorage.setItem("groupid",groupid);
+  const userchat= await axios.get(`http://localhost:3000/fetchGroupChat/?groupid=${groupid} & lastmessageid=${LastMessageId}`,{
+     headers: {
+    'Authorization':token
+  } 
+});
+        const totalmesage= userchat.data.userchat.length
+        if(totalmesage>0){
+                    localStorage.setItem('Lastmessageid',userchat.data.userchat[totalmesage-1].id);
+                    messageList.innerHTML="";
+                    addMessageOnScreen(userchat);
+            }
+          // console.log(userchat.data);
+          //   addMessageOnScreen(userchat)
   }
 
 
@@ -210,9 +241,9 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
          const message = messageInput.value;
          // Do something with message
          messageInput.value = '';
-         const messageElem = document.createElement('p');
-         messageElem.textContent = message;
-         messageList.appendChild(messageElem);
+        //  const messageElem = document.createElement('p');
+        //  messageElem.textContent = message;
+        //  messageList.appendChild(messageElem);
          // alert("i am input box");
          
          const msg={
@@ -238,7 +269,7 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
  function addMessageOnScreen(message)
 {
   
-  // messageList.innerHTML="";
+    // messageList.innerHTML="";
   console.log(message);
   for (let index = 0; index < message.data.userchat.length; index++) {
 
@@ -246,40 +277,17 @@ createGroupSubmitBtn.addEventListener("click",  async function(event) {
         {
          
          console.log("i am in")
-            //   newMessage.innerHTML =`
-            //   <div class="message-content">
-            //     <p>${message.data.userchat[index].message}</p>
-            //   </div>
-            //   <div class="message-sender">
-            //     <span>You</span>
-            //   </div>`;
-            // const   newGroupListItem=  `<li><a href="#">fdkj;l</a>ff</li>`;
-            //    // newGroupListItem.style.textAlign = "right";
-            //    showGroupList.innerHTML+=newGroupListItem;
             const messageElem = document.createElement('p');
-            messageElem.textContent =message.data.userchat[index].message ;
+            messageElem.textContent =message.data.userchat[index].message+"-"+"You" ;
             messageElem.style.textAlign="right";
              messageList.appendChild(messageElem);
                
          }else{
                 console.log("jello ajay");
-            //     newMessage.innerHTML = `
-            //     <div class="message-sender">
-            //       <span>${message.data.userchat[index].tbluserdetail.username}</span>
-            //     </div>
-            //     <div class="message-content">
-            //       <p>${message.data.userchat[index].message}</p>
-            //     </div>`;
-            //   newMessage.style.textAlign= "left";
-            //   newGroupListItem=  `<li><a href="#">fdkj;l</a></li>`;
-              // newGroupListItem.style.textAlign = "right";
-            //   showGroupList.innerHTML+=newGroupListItem;
-        
-
-              const messageElem = document.createElement('p');
-            messageElem.textContent =message.data.userchat[index].message ;
-            messageElem.style.textAlign="left";
-             messageList.appendChild(messageElem);
+                const messageElem = document.createElement('p');
+              messageElem.textContent =message.data.userchat[index].tbluserdetail.username+"-"+message.data.userchat[index].message;
+              messageElem.style.textAlign="left";
+              messageList.appendChild(messageElem);
         // messageList.scrollTop = messageList.scrollHeight - messageList.clientHeight;
         }
      
@@ -291,13 +299,18 @@ var uname="";
 var userid=0;
 
 function parseJwt (token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
+  try {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+      console.log(error);
+  }
+  
 }
 
 (function(){
@@ -308,3 +321,59 @@ function parseJwt (token) {
  console.log('userid'+userid);
 //  document.getElementById('username').innerText=userdetail.username;
 }())
+
+
+
+async function groupPermission(groupid,groupname){
+  try {
+    const token=localStorage.getItem('token');
+    localStorage.setItem('groupid',groupid);
+    alert("i am groupPermission"+groupid+" "+groupname);
+    const isadmin=await axios.get(`http://localhost:3000/checkAdmin?groupid=${groupid}`,{
+      headers: {
+     'Authorization':token
+   } 
+
+});
+  console.log(isadmin);
+    if(isadmin.data.isAdmin.isAdmin===true || isadmin.data.isAdmin.isSuperAdmin===true )
+    {
+      location.href='permissionPage.htm'
+    }else{
+    // if(isadmin.data.isAdmin.isAdmin===false || isadmin.data.isAdmin.isSuperAdmin===false ){
+        alert("you have not permission");
+    }
+    
+  } catch (error) {
+    
+  }
+ 
+}
+
+
+ try {
+    setInterval(async() => {
+         const token=localStorage.getItem('token');
+          const LastMessageId=localStorage.getItem('Lastmessageid') || -1;
+          console.log(LastMessageId);
+        const groupid = localStorage.getItem("groupid");
+          if(groupid>=0){
+      const userchat= await axios.get(`http://localhost:3000/fetchGroupChat/?groupid=${groupid}&lastmessageid=${LastMessageId}`,{
+         headers: {
+        'Authorization':token
+      } 
+   });
+       console.log(userchat.data);
+      
+       const totalmesage= userchat.data.userchat.length
+       console.log("totallen"+totalmesage);
+       if(totalmesage>0){
+           localStorage.setItem('Lastmessageid',userchat.data.userchat[totalmesage-1].id);
+          addMessageOnScreen(userchat);
+       }
+      }
+    }, 1000);
+  } catch (error) {
+    console.log(error);
+    unauthorizedUser(error);
+  }
